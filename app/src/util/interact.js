@@ -117,7 +117,6 @@ export const mintNFT = async (count) => {
       tx: null,
     };
 
-  console.log(typeof window.ethereum.networkVersion);
   if (window.ethereum.networkVersion !== "1088")
     return {
       success: false,
