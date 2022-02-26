@@ -2,10 +2,8 @@ import BigNumber from "bignumber.js";
 import Web3 from "web3";
 
 import contractABI from "../contract-abi.json";
-// const contractAddress = "0x57a85a6d820c95ae6aa9980ecece66a3e71f111b"; // TESTNET Stardust Address
+// const contractAddress = "0x5101c1245f501D5F2967939ba64CE3e440154b57"; // TESTNET Stardust Address
 const contractAddress = "0xE1f73A7146d23E7dD666CCd5C8D27d976024DeE4"; // Mainnet Andromeda Address
-
-// const web3 = new Web3("https://andromeda.metis.io/?owner=1088");
 
 export const connectWallet = async () => {
   if (window.ethereum) {
@@ -101,10 +99,18 @@ const oneMintPrice = (count) => {
   if (count < 5) return 0.69;
   if (count >= 5 && count < 10) return 0.55;
   return 0.42;
+
+  //
+  // Lower logic is for Testnet contract
+  //
+
+  // if (count < 5) return 0.01;
+  // if (count >= 5 && count < 10) return 0.005;
+  // return 0.003;
 };
 
 export const mintNFT = async (count) => {
-  if (window.ethereum) {
+  if (window.ethereum && window.ethereum.networkVersion === 1088) {
     const web3 = new Web3(window.ethereum);
     const ToadzContract = new web3.eth.Contract(contractABI, contractAddress);
 
@@ -114,20 +120,22 @@ export const mintNFT = async (count) => {
       .toString();
 
     try {
-      const txHash = await ToadzContract.methods.purchase(count).send({
+      const tx = await ToadzContract.methods.purchase(count).send({
         from: window.ethereum.selectedAddress,
         value,
       });
       return {
         success: true,
         status:
-          "✅ Check out your transaction on Etherscan: https://ropsten.etherscan.io/tx/" +
-          txHash,
+          "✅ Check out your transaction on Andromeda Explorer: https://andromeda-explorer.metis.io/tx/" +
+          tx.transactionHash,
+        tx: tx,
       };
     } catch (error) {
       return {
         success: false,
         status: "😥 Something went wrong: " + error.message,
+        tx: null,
       };
     }
   }
