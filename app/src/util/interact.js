@@ -2,7 +2,8 @@ import BigNumber from "bignumber.js";
 import Web3 from "web3";
 
 import contractABI from "../contract-abi.json";
-const contractAddress = "0xE1f73A7146d23E7dD666CCd5C8D27d976024DeE4";
+// const contractAddress = "0x57a85a6d820c95ae6aa9980ecece66a3e71f111b"; // TESTNET Stardust Address
+const contractAddress = "0xE1f73A7146d23E7dD666CCd5C8D27d976024DeE4"; // Mainnet Andromeda Address
 
 // const web3 = new Web3("https://andromeda.metis.io/?owner=1088");
 
