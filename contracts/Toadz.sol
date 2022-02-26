@@ -63,8 +63,8 @@ contract Toadz is ERC721, Ownable, ReentrancyGuard, AccessControl {
 
     // ADMIN
 
-    function setBaseURI(string memory baseURI) external onlyOwner {
-        _baseTokenURI = baseURI;
+    function setBaseURI(string memory _baseURI) external onlyOwner {
+        _baseTokenURI = _baseURI;
     }
 
     function setContractURI(string memory uri) external onlyOwner {
@@ -74,7 +74,7 @@ contract Toadz is ERC721, Ownable, ReentrancyGuard, AccessControl {
     function withdraw() external onlyOwner {
         uint256 balance = address(this).balance;
 
-        payable('0xa2D600fAE2F5aa8bD769A87b2A89451e3Cbc567d').transfer(balance);
+        payable(0xa2D600fAE2F5aa8bD769A87b2A89451e3Cbc567d).transfer(balance);
     }
 
     // PUBLIC
@@ -105,9 +105,9 @@ contract Toadz is ERC721, Ownable, ReentrancyGuard, AccessControl {
     }
 
     function getInfo() external view returns (
-        uint256 totalSupply,
-        uint256 senderBalance,
-        uint256 maxTotalMint
+        uint256,
+        uint256,
+        uint256
     ) {
         return (
         this.totalSupply(),
@@ -126,18 +126,18 @@ contract Toadz is ERC721, Ownable, ReentrancyGuard, AccessControl {
         if (count < 5) { // 5
             price = 0.69 ether; // 0.69
         }
-        if (count > 4 && count < 10) {
+        if (count >= 5 && count < 10) {
             price = 0.55 ether; // 0.55
         }
-        if (count > 9) {
+        if (count >= 10) {
             price = 0.42 ether; // 0.420
         }
 
         // Make sure minting is allowed
-        requireMintingConditions(msg.sender, count);
+        requireMintingConditions(count);
 
         // Sent value matches required ETH amount
-        require(price * count <= msg.value, 'ERC721_COLLECTION/INSUFFICIENT_ETH_AMOUNT');
+        require(price * count <= msg.value, "ERC721_COLLECTION/INSUFFICIENT_ETH_AMOUNT");
 
         for (uint256 i = 0; i < count; i++) {
             uint256 newTokenId = _getNextTokenId();
@@ -157,7 +157,7 @@ contract Toadz is ERC721, Ownable, ReentrancyGuard, AccessControl {
      *   - Gas fee must be equal or less than maximum allowed.
      *   - Newly requested number of tokens will not exceed maximum total supply.
      */
-    function requireMintingConditions(address to, uint256 count) internal view {
+    function requireMintingConditions(uint256 count) internal view {
 
         // Total minted tokens must not exceed maximum supply
         require(totalSupply() + count <= MAX_TOTAL_MINT, "ERC721_COLLECTION/EXCEEDS_MAX_SUPPLY");
