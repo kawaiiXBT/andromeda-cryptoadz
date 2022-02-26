@@ -8,8 +8,9 @@ import {
 const Minter = (props) => {
   const [walletAddress, setWallet] = useState("");
   const [status, setStatus] = useState("");
-
+  const [success, setSuccess] = useState(false);
   const [count, setCount] = useState("");
+  const [mintedTokens, setMintedTokens] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,11 +60,26 @@ const Minter = (props) => {
   };
 
   const onMintPressed = async () => {
-    const { success, status } = await mintNFT(count);
+    const { success, status, tx } = await mintNFT(count);
     setStatus(status);
     if (success) {
       setCount("");
+      setSuccess(true);
+      let mintedTokensFromTX;
+
+      // If user mints >1 NFT, it returns an array. If 1 NFT => Object
+      if (Array.isArray(tx.events.Transfer)) {
+        mintedTokensFromTX = tx.events.Transfer.map(
+          (item) => item.returnValues.tokenId
+        );
+      } else {
+        mintedTokensFromTX = [tx.events.Transfer.returnValues.tokenId];
+      }
+
+      setMintedTokens(mintedTokensFromTX);
+      return;
     }
+    setSuccess(false);
   };
 
   return (
@@ -78,7 +94,6 @@ const Minter = (props) => {
           <span>Connect Wallet</span>
         )}
       </button>
-
       <br></br>
       <h1 id="title">AndromedaToadz Minter</h1>
       <p>
@@ -104,6 +119,17 @@ const Minter = (props) => {
       <p id="status" style={{ color: "red" }}>
         {status}
       </p>
+      {success && mintedTokens.length !== 0 && (
+        <div className="nft_images">
+          <h2>Your minted Toadz</h2>
+          {mintedTokens.map((item) => (
+            <img
+              src={`https://ipfs.io/ipfs/bafybeihel2lrxe2mtbo6ruleaeqcbckxqv24aydgez2m75gc5amu6nbyey/files/${item}.jpg`}
+              alt="Toadz"
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

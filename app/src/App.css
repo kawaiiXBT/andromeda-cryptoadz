@@ -36,3 +36,13 @@
     transform: rotate(360deg);
   }
 }
+
+/* Images */
+
+.nft_images {
+  width: 100%;
+}
+.nft_images img {
+  width: 200px;
+  height: 200px;
+}
