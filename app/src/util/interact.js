@@ -110,33 +110,44 @@ const oneMintPrice = (count) => {
 };
 
 export const mintNFT = async (count) => {
-  if (window.ethereum && window.ethereum.networkVersion === 1088) {
-    const web3 = new Web3(window.ethereum);
-    const ToadzContract = new web3.eth.Contract(contractABI, contractAddress);
+  if (!window.ethereum)
+    return {
+      success: false,
+      status: "Add Metamask",
+      tx: null,
+    };
+  if (window.ethereum.networkVersion !== 1088)
+    return {
+      success: false,
+      status: "Connect to Andromeda Metis",
+      tx: null,
+    };
 
-    const value = BigNumber(oneMintPrice(count))
-      .shiftedBy(18)
-      .times(count)
-      .toString();
+  const web3 = new Web3(window.ethereum);
+  const ToadzContract = new web3.eth.Contract(contractABI, contractAddress);
 
-    try {
-      const tx = await ToadzContract.methods.purchase(count).send({
-        from: window.ethereum.selectedAddress,
-        value,
-      });
-      return {
-        success: true,
-        status:
-          "✅ Check out your transaction on Andromeda Explorer: https://andromeda-explorer.metis.io/tx/" +
-          tx.transactionHash,
-        tx: tx,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        status: "😥 Something went wrong: " + error.message,
-        tx: null,
-      };
-    }
+  const value = BigNumber(oneMintPrice(count))
+    .shiftedBy(18)
+    .times(count)
+    .toString();
+
+  try {
+    const tx = await ToadzContract.methods.purchase(count).send({
+      from: window.ethereum.selectedAddress,
+      value,
+    });
+    return {
+      success: true,
+      status:
+        "✅ Check out your transaction on Andromeda Explorer: https://andromeda-explorer.metis.io/tx/" +
+        tx.transactionHash,
+      tx: tx,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      status: "😥 Something went wrong: " + error.message,
+      tx: null,
+    };
   }
 };
