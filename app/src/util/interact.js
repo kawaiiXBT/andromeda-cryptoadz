@@ -12,7 +12,7 @@ export const connectWallet = async () => {
         method: "eth_requestAccounts",
       });
       const obj = {
-        status: "👆🏽 Write a message in the text-field above.",
+        status: "",
         address: addressArray[0],
       };
       return obj;
@@ -54,7 +54,7 @@ export const getCurrentWalletConnected = async () => {
       if (addressArray.length > 0) {
         return {
           address: addressArray[0],
-          status: "👆🏽 Write a message in the text-field above.",
+          status: "👆🏽 Type how much Toadz to mint.",
         };
       } else {
         return {
@@ -116,7 +116,8 @@ export const mintNFT = async (count) => {
       status: "Add Metamask",
       tx: null,
     };
-  if (window.ethereum.networkVersion !== 1088)
+
+  if (window.ethereum.networkVersion !== "1088")
     return {
       success: false,
       status: "Connect to Andromeda Metis",
