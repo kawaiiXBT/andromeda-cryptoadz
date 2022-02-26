@@ -1,7 +1,11 @@
-const Web3 = require('web3')
-const contractABI = require("../contract-abi.json");
-const contractAddress = "0x3e50C9918bAB9AAb572197DB89CAc9a78cD557b6";
-const web3 = new Web3('https://andromeda.metis.io/?owner=1088')
+import BigNumber from "bignumber.js";
+import Web3 from "web3";
+
+import contractABI from "../contract-abi.json";
+// const contractAddress = "0x57a85a6d820c95ae6aa9980ecece66a3e71f111b"; // TESTNET Stardust Address
+const contractAddress = "0xE1f73A7146d23E7dD666CCd5C8D27d976024DeE4"; // Mainnet Andromeda Address
+
+// const web3 = new Web3("https://andromeda.metis.io/?owner=1088");
 
 export const connectWallet = async () => {
   if (window.ethereum) {
@@ -28,7 +32,11 @@ export const connectWallet = async () => {
           <p>
             {" "}
             🦊{" "}
-            <a target="_blank" href={`https://metamask.io/download.html`}>
+            <a
+              target="_blank"
+              rel="noreferrer"
+              href={`https://metamask.io/download.html`}
+            >
               You must install Metamask, a virtual Ethereum wallet, in your
               browser.
             </a>
@@ -70,7 +78,11 @@ export const getCurrentWalletConnected = async () => {
           <p>
             {" "}
             🦊{" "}
-            <a target="_blank" href={`https://metamask.io/download.html`}>
+            <a
+              target="_blank"
+              rel="noreferrer"
+              href={`https://metamask.io/download.html`}
+            >
               You must install Metamask, a virtual Ethereum wallet, in your
               browser.
             </a>
@@ -81,37 +93,42 @@ export const getCurrentWalletConnected = async () => {
   }
 };
 
-async function loadContract() {
-  return new web3.eth.Contract(contractABI, contractAddress);
-}
+// async function loadContract() {
+//   return new web3.eth.Contract(contractABI, contractAddress);
+// }
+
+const oneMintPrice = (count) => {
+  if (count < 5) return 0.69;
+  if (count >= 5 && count < 10) return 0.55;
+  return 0.42;
+};
 
 export const mintNFT = async (count) => {
+  if (window.ethereum) {
+    const web3 = new Web3(window.ethereum);
+    const ToadzContract = new web3.eth.Contract(contractABI, contractAddress);
 
-  window.contract = await new web3.eth.Contract(contractABI, contractAddress);
+    const value = BigNumber(oneMintPrice(count))
+      .shiftedBy(18)
+      .times(count)
+      .toString();
 
-  const transactionParameters = {
-    to: contractAddress, // Required except during contract publications.
-    from: window.ethereum.selectedAddress, // must match user's active address.
-    data: window.contract.methods
-      .mint(count)
-      .encodeABI(),
-  };
-
-  try {
-    const txHash = await window.ethereum.request({
-      method: "eth_sendTransaction",
-      params: [transactionParameters],
-    });
-    return {
-      success: true,
-      status:
-        "✅ Check out your transaction on Etherscan: https://ropsten.etherscan.io/tx/" +
-        txHash,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      status: "😥 Something went wrong: " + error.message,
-    };
+    try {
+      const txHash = await ToadzContract.methods.purchase(count).send({
+        from: window.ethereum.selectedAddress,
+        value,
+      });
+      return {
+        success: true,
+        status:
+          "✅ Check out your transaction on Etherscan: https://ropsten.etherscan.io/tx/" +
+          txHash,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        status: "😥 Something went wrong: " + error.message,
+      };
+    }
   }
 };
