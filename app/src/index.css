@@ -1,28 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap");
 
 body {
   margin: 0;
-  font-family: 'Rubik';
-  color: #254cdd;
+  font-family: Inter;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+/* 
 .Minter {
   max-width: 80vh;
   max-height: 80vh;
   padding: 60px 100px;
   margin: 0 auto;
   text-align: left;
+} */
 
-}
-
-input {
+/* input {
   border-top-style: hidden;
   border-right-style: hidden;
   border-left-style: hidden;
@@ -31,18 +35,16 @@ input {
   width: 100%;
   border-color: rgba(4, 4, 5, 0.1);
   line-height: 32px;
-}
+} */
 
 input:focus {
   outline: none;
   border-color: rgba(4, 4, 5, 0.4);
 }
 
-
-button {
+/* button {
   padding: 9px 16px;
   max-height: 40px;
-  /*box-shadow: 4px 4px 15px 0 rgb(0 0 0 / 20%);*/
   border-color: #254cdd;
   color: #254cdd;
   background-color: white;
@@ -52,12 +54,8 @@ button {
   font-weight: 500;
   text-align: center;
   font-weight: bold;
-  cursor:pointer;
-}
-
-button:hover {
-  margin-top: -1px;
-}
+  cursor: pointer;
+} */
 
 #title {
   padding-top: 32px;
@@ -72,7 +70,7 @@ button:hover {
 
 #walletButton {
   text-align: right;
-  float:right;
+  float: right;
   margin-bottom: 50px;
   line-height: 16px;
 }
@@ -86,9 +84,9 @@ button:hover {
   outline:none;
   border :none;
 } */
-
+/* 
 #mintButton {
   margin-top: 40px;
   background-color: #254cdd;
-  color:white;
-}
+  color: white;
+} */
