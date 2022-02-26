@@ -9,17 +9,18 @@ const Minter = (props) => {
   const [walletAddress, setWallet] = useState("");
   const [status, setStatus] = useState("");
 
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [url, setURL] = useState("");
+  const [count, setCount] = useState("");
 
-  useEffect(async () => {
-    const { address, status } = await getCurrentWalletConnected();
+  useEffect(() => {
+    const fetchData = async () => {
+      const { address, status } = await getCurrentWalletConnected();
 
-    setWallet(address);
-    setStatus(status);
+      setWallet(address);
+      setStatus(status);
 
-    addWalletListener();
+      addWalletListener();
+    };
+    fetchData();
   }, []);
 
   function addWalletListener() {
@@ -38,7 +39,11 @@ const Minter = (props) => {
         <p>
           {" "}
           🦊{" "}
-          <a target="_blank" href={`https://metamask.io/download.html`}>
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href={`https://metamask.io/download.html`}
+          >
             You must install Metamask, a virtual Ethereum wallet, in your
             browser.
           </a>
@@ -54,12 +59,10 @@ const Minter = (props) => {
   };
 
   const onMintPressed = async () => {
-    const { success, status } = await mintNFT(url, name, description);
+    const { success, status } = await mintNFT(count);
     setStatus(status);
     if (success) {
-      setName("");
-      setDescription("");
-      setURL("");
+      setCount("");
     }
   };
 
@@ -79,17 +82,23 @@ const Minter = (props) => {
       <br></br>
       <h1 id="title">AndromedaToadz Minter</h1>
       <p>
-        Small amphibious creatures that leapt across the universe and now call Metis Andromeda their home.
+        Small amphibious creatures that leapt across the universe and now call
+        Metis Andromeda their home.
       </p>
       <form>
         <h2>How Many? </h2>
         <input
           type="text"
           placeholder="1"
-          onChange={(event) => setName(event.target.value)}
+          value={count}
+          onChange={(event) => setCount(event.target.value)}
         />
-        </form>
-      <button id="mintButton" onClick={onMintPressed}>
+      </form>
+      <button
+        id="mintButton"
+        disabled={count.length === 0}
+        onClick={onMintPressed}
+      >
         Mint NFT
       </button>
       <p id="status" style={{ color: "red" }}>
