@@ -54,7 +54,7 @@ export const getCurrentWalletConnected = async () => {
       if (addressArray.length > 0) {
         return {
           address: addressArray[0],
-          status: "👆🏽 Type how much Toadz to mint.",
+          status: "",
         };
       } else {
         return {

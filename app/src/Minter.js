@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { MinterWrapper } from "./Minter.styles.js";
 import {
   connectWallet,
   getCurrentWalletConnected,
@@ -60,7 +61,8 @@ const Minter = (props) => {
     setWallet(walletResponse.address);
   };
 
-  const onMintPressed = async () => {
+  const onMintPressed = async (e) => {
+    e.preventDefault();
     const { success, status, tx } = await mintNFT(count);
     setStatus(status);
     if (success) {
@@ -84,8 +86,12 @@ const Minter = (props) => {
   };
 
   return (
-    <div className="Minter">
-      <button id="walletButton" onClick={connectWalletPressed}>
+    <MinterWrapper className="Minter">
+      <button
+        className="minter_wallet_button"
+        id="walletButton"
+        onClick={connectWalletPressed}
+      >
         {walletAddress.length > 0 ? (
           "Connected: " +
           String(walletAddress).substring(0, 6) +
@@ -95,43 +101,46 @@ const Minter = (props) => {
           <span>Connect Wallet</span>
         )}
       </button>
-      <br></br>
-      <h1 id="title">AndromedaToadz Minter</h1>
-      <p>
-        Small amphibious creatures that leapt across the universe and now call
-        Metis Andromeda their home.
-      </p>
-      <form>
-        <h2>How Many? </h2>
-        <input
-          type="text"
-          placeholder="1"
-          value={count}
-          onChange={(event) => setCount(event.target.value)}
-        />
-      </form>
-      <button
-        id="mintButton"
-        disabled={count.length === 0}
-        onClick={onMintPressed}
-      >
-        Mint NFT
-      </button>
-      <p id="status" style={{ color: "red" }}>
-        {status}
-      </p>
-      {success && mintedTokens.length !== 0 && (
-        <div className="nft_images">
-          <h2>Your minted Toadz</h2>
-          {mintedTokens.map((item) => (
-            <img
-              src={`https://ipfs.io/ipfs/bafybeihel2lrxe2mtbo6ruleaeqcbckxqv24aydgez2m75gc5amu6nbyey/files/${item}.jpg`}
-              alt="Toadz"
+      <div className="minter_body">
+        <h1 id="title">AndromedaToadz Minter</h1>
+        <p>
+          Small amphibious creatures that leapt across the universe and now call
+          Metis Andromeda their home.
+        </p>
+        <form onSubmit={onMintPressed}>
+          <h2>How Many?</h2>
+          <div className="minter_form_input">
+            <input
+              type="text"
+              value={count}
+              onChange={(event) => setCount(event.target.value)}
             />
-          ))}
-        </div>
-      )}
-    </div>
+            <button
+              id="mintButton"
+              disabled={count.length === 0}
+              onClick={onMintPressed}
+            >
+              Mint NFT
+            </button>
+          </div>
+        </form>
+
+        <p className="minter_message">{status}</p>
+        {success && mintedTokens.length !== 0 && (
+          <div className="nft_images">
+            <h2>You have minted</h2>
+            <div className="nft_images_grid">
+              {mintedTokens.map((item) => (
+                <img
+                  src={`https://ipfs.io/ipfs/bafybeihel2lrxe2mtbo6ruleaeqcbckxqv24aydgez2m75gc5amu6nbyey/files/${item}.jpg`}
+                  alt="Toadz"
+                />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </MinterWrapper>
   );
 };
 
