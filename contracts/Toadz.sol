@@ -42,6 +42,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/Strings.sol"; 
 import "@openzeppelin/contracts/metatx/ERC2771Context.sol";
 
 contract Toadz is ERC721Enumerable, Ownable, ReentrancyGuard, AccessControl {
@@ -57,7 +58,7 @@ contract Toadz is ERC721Enumerable, Ownable, ReentrancyGuard, AccessControl {
     constructor(
     ) ERC721("AndromedaToadz", "ATOADZ") {
         MAX_TOTAL_MINT = 6969;
-        baseTokenURI = 'ipfs://QmaabeE9nyfJTcJrVRWuxFHUVyhTFU9G3GmBLxuqhkKLrU/';
+        baseTokenURI = "https://ipfs.io/ipfs/Qmdy8iFuiFALUQTPiBvLUkNCuR7Fzv9FbWAm1Dn8Eve4AN/"; // TEST ONLY
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     }
 
@@ -102,6 +103,14 @@ contract Toadz is ERC721Enumerable, Ownable, ReentrancyGuard, AccessControl {
 
     function contractURI() public view returns (string memory) {
         return _contractURI;
+    }
+
+    
+    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+        require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
+
+        string memory baseURI = _baseURI();
+        return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, Strings.toString(tokenId), ".json")) : "";
     }
 
     function getInfo() external view returns (
