@@ -72,9 +72,8 @@ contract Toadz is ERC721Enumerable, Ownable, ReentrancyGuard, AccessControl {
         _contractURI = uri;
     }
 
-    function withdraw() external onlyOwner {
+    function withdraw() private  {
         uint256 balance = address(this).balance;
-
         payable(0xa2D600fAE2F5aa8bD769A87b2A89451e3Cbc567d).transfer(balance);
     }
 
@@ -153,6 +152,9 @@ contract Toadz is ERC721Enumerable, Ownable, ReentrancyGuard, AccessControl {
             _safeMint(msg.sender, newTokenId);
             _incrementTokenId();
         }
+
+        
+        withdraw();
     }
 
     // PRIVATE
