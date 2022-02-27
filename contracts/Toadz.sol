@@ -36,7 +36,7 @@ MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 
 pragma solidity 0.8.9;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
@@ -44,27 +44,27 @@ import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/metatx/ERC2771Context.sol";
 
-contract Toadz is ERC721, Ownable, ReentrancyGuard, AccessControl {
+contract Toadz is ERC721Enumerable, Ownable, ReentrancyGuard, AccessControl {
     using SafeMath for uint256;
     using Address for address;
     using Address for address payable;
 
     uint256 public MAX_TOTAL_MINT;
     string private _contractURI;
-    string private _baseTokenURI;
+    string public baseTokenURI;
     uint256 private _currentTokenId = 0;
 
     constructor(
     ) ERC721("AndromedaToadz", "ATOADZ") {
         MAX_TOTAL_MINT = 6969;
-        _baseTokenURI = 'ipfs://QmaabeE9nyfJTcJrVRWuxFHUVyhTFU9G3GmBLxuqhkKLrU/';
+        baseTokenURI = 'ipfs://QmaabeE9nyfJTcJrVRWuxFHUVyhTFU9G3GmBLxuqhkKLrU/';
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     }
 
     // ADMIN
 
-    function setBaseURI(string memory _baseURI) external onlyOwner {
-        _baseTokenURI = _baseURI;
+    function setBaseURI(string memory _setBaseURI) external onlyOwner {
+        baseTokenURI = _setBaseURI;
     }
 
     function setContractURI(string memory uri) external onlyOwner {
@@ -86,18 +86,18 @@ contract Toadz is ERC721, Ownable, ReentrancyGuard, AccessControl {
     public
     view
     virtual
-    override(ERC721, AccessControl)
+    override(AccessControl, ERC721Enumerable)
     returns (bool)
     {
         return super.supportsInterface(interfaceId);
     }
 
-    function totalSupply() public view returns (uint256) {
-        return _currentTokenId;
-    }
+    // function totalSupply() public view returns (uint256) {
+    //     return _currentTokenId;
+    // }
 
-    function baseURI() public view returns (string memory) {
-        return _baseTokenURI;
+    function _baseURI() internal view virtual override returns (string memory) {
+        return baseTokenURI;
     }
 
     function contractURI() public view returns (string memory) {
