@@ -91,9 +91,13 @@ export const getCurrentWalletConnected = async () => {
   }
 };
 
-// async function loadContract() {
-//   return new web3.eth.Contract(contractABI, contractAddress);
-// }
+export const fetchMintedTokens = async () => {
+  const web3 = new Web3("https://andromeda.metis.io/?owner=1088");
+  const ToadzContract = new web3.eth.Contract(contractABI, contractAddress);
+  const info = await ToadzContract.methods.getInfo().call();
+
+  return info.totalSupply;
+};
 
 const oneMintPrice = (count) => {
   if (count < 5) return 0.69;

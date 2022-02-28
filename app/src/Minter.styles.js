@@ -5,21 +5,36 @@ export const MinterWrapper = styled.div`
   width: 100%;
   margin: 0 auto;
   padding: 1rem;
-  .minter_wallet_button {
-    cursor: pointer;
-    padding: 0.5rem 0.5rem;
-    font-size: 16px;
-    border-radius: 10px;
-    outline: 0;
-    border: 1px solid ${(props) => props.theme.titleText};
-    background: 0;
-    color: ${(props) => props.theme.text};
-    font-weight: 600;
-    :hover {
-      background: ${(props) => props.theme.titleText};
-      color: ${(props) => props.theme.bg};
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .minter_header_info {
+      color: ${(props) => props.theme.text};
+      font-weight: 500;
+      b {
+        color: ${(props) => props.theme.titleText};
+        margin-left: 1rem;
+      }
+    }
+    .minter_wallet_button {
+      font-family: Inter;
+      cursor: pointer;
+      padding: 0.5rem 0.5rem;
+      font-size: 16px;
+      border-radius: 10px;
+      outline: 0;
+      border: 1px solid ${(props) => props.theme.titleText};
+      background: 0;
+      color: ${(props) => props.theme.text};
+      font-weight: 500;
+      :hover {
+        background: ${(props) => props.theme.titleText};
+        color: ${(props) => props.theme.bg};
+      }
     }
   }
+
   .minter_body {
     width: 100%;
     display: flex;
@@ -42,16 +57,16 @@ export const MinterWrapper = styled.div`
         /* font-size: 14px; */
       }
     }
-
+    h2 {
+      color: ${(props) => props.theme.titleText};
+      margin-bottom: 1rem;
+    }
     form {
       display: flex;
       flex-direction: column;
       align-items: center;
       margin-bottom: 2rem;
-      h2 {
-        color: ${(props) => props.theme.titleText};
-        margin-bottom: 1rem;
-      }
+
       .minter_form_input {
         border: 1px solid ${(props) => props.theme.titleText};
         display: flex;
