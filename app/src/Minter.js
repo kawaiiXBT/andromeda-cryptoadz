@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { MinterWrapper } from "./Minter.styles.js";
 import {
   connectWallet,
+  fetchMintedTokens,
   getCurrentWalletConnected,
   mintNFT,
 } from "./util/interact.js";
+import BigNumber from "bignumber.js";
 
 const Minter = (props) => {
   const [walletAddress, setWallet] = useState("");
@@ -12,6 +14,7 @@ const Minter = (props) => {
   const [success, setSuccess] = useState(false);
   const [count, setCount] = useState("");
   const [mintedTokens, setMintedTokens] = useState([]);
+  const [info, setInfo] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,6 +27,14 @@ const Minter = (props) => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchMintedTokens();
+      setInfo(data);
+    };
+    fetchData();
+  });
 
   function addWalletListener() {
     if (window.ethereum) {
@@ -87,43 +98,51 @@ const Minter = (props) => {
 
   return (
     <MinterWrapper className="Minter">
-      <button
-        className="minter_wallet_button"
-        id="walletButton"
-        onClick={connectWalletPressed}
-      >
-        {walletAddress.length > 0 ? (
-          "Connected: " +
-          String(walletAddress).substring(0, 6) +
-          "..." +
-          String(walletAddress).substring(38)
-        ) : (
-          <span>Connect Wallet</span>
-        )}
-      </button>
+      <header>
+        <div className="minter_header_info">
+          Minted:
+          <b>{info} / 6969</b>
+        </div>
+
+        <button className="minter_wallet_button" onClick={connectWalletPressed}>
+          {walletAddress.length > 0
+            ? "Connected: " +
+              String(walletAddress).substring(0, 6) +
+              "..." +
+              String(walletAddress).substring(38)
+            : "Connect Wallet"}
+        </button>
+      </header>
+
       <div className="minter_body">
         <h1 id="title">AndromedaToadz Minter</h1>
         <p>
           Small amphibious creatures that leapt across the universe and now call
           Metis Andromeda their home.
         </p>
-        <form onSubmit={onMintPressed}>
-          <h2>How Many?</h2>
-          <div className="minter_form_input">
-            <input
-              type="text"
-              value={count}
-              onChange={(event) => setCount(event.target.value)}
-            />
-            <button
-              id="mintButton"
-              disabled={count.length === 0}
-              onClick={onMintPressed}
-            >
-              Mint NFT
-            </button>
+        {BigNumber(info).eq(6969) ? (
+          <div>
+            <h2>All AndromedaToadz have been minted</h2>
           </div>
-        </form>
+        ) : (
+          <form onSubmit={onMintPressed}>
+            <h2>How Many?</h2>
+            <div className="minter_form_input">
+              <input
+                type="text"
+                value={count}
+                onChange={(event) => setCount(event.target.value)}
+              />
+              <button
+                id="mintButton"
+                disabled={count.length === 0}
+                onClick={onMintPressed}
+              >
+                Mint NFT
+              </button>
+            </div>
+          </form>
+        )}
 
         <p className="minter_message">{status}</p>
         {success && mintedTokens.length !== 0 && (
