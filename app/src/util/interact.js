@@ -3,7 +3,7 @@ import Web3 from "web3";
 
 import contractABI from "../contract-abi.json";
 // const contractAddress = "0x5101c1245f501D5F2967939ba64CE3e440154b57"; // TESTNET Stardust Address
-const contractAddress = "0xE1f73A7146d23E7dD666CCd5C8D27d976024DeE4"; // Mainnet Andromeda Address
+const contractAddress = "0x6586d86726B55Cbc7808b50410333Da8b5949447"; // Mainnet Andromeda Address
 
 export const connectWallet = async () => {
   if (window.ethereum) {
@@ -137,8 +137,16 @@ export const mintNFT = async (count) => {
     .toString();
 
   try {
+    const estimateGas = await ToadzContract.methods
+      .purchase(count)
+      .estimateGas({
+        value,
+        from: web3.eth.defaultAccount,
+      });
+
     const tx = await ToadzContract.methods.purchase(count).send({
       from: window.ethereum.selectedAddress,
+      gas: +BigNumber(estimateGas).times(1.01).toFixed(0),
       value,
     });
     return {
