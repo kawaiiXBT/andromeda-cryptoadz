@@ -145,7 +145,7 @@ export const mintNFT = async (count) => {
 
     const tx = await ToadzContract.methods.purchase(count).send({
       from: window.ethereum.selectedAddress,
-      gas: +BigNumber(estimateGas).times(3.5).toFixed(0),
+      gas: +estimateGas,
       value,
     });
     return {
