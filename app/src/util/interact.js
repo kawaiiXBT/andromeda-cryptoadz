@@ -137,16 +137,15 @@ export const mintNFT = async (count) => {
     .toString();
 
   try {
-    const estimateGas = await ToadzContract.methods
-      .purchase(count)
-      .estimateGas({
-        value,
-        from: web3.eth.defaultAccount,
-      });
+    // According to previous transactions - 750000 would be base and for every NFT additional 100000 gas
+    const estimateGas = BigNumber(750000)
+      .plus(100000 * count)
+      .times(1.3)
+      .toFixed(0);
 
     const tx = await ToadzContract.methods.purchase(count).send({
       from: window.ethereum.selectedAddress,
-      gas: +BigNumber(estimateGas).times(1.01).toFixed(0),
+      gas: +BigNumber(estimateGas).times(3.5).toFixed(0),
       value,
     });
     return {
