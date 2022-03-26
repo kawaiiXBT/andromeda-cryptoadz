@@ -148,11 +148,11 @@ const Minter = (props) => {
           <h2>Mint price</h2>
           <div className="prices_list">
             <div>1-4 mint</div>
-            <div>0.69 METIS</div>
+            <div>0.69 METIS each</div>
             <div>5-9 mint</div>
-            <div>0.55 METIS</div>
+            <div>0.55 METIS each</div>
             <div>10+ mint</div>
-            <div>0.42 METIS</div>
+            <div>0.42 METIS each</div>
           </div>
         </div>
         {success && mintedTokens.length !== 0 && (
