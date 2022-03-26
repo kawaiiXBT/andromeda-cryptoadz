@@ -42,7 +42,6 @@ const Minter = (props) => {
         if (accounts.length > 0) {
           setWallet(accounts[0]);
           setStatus("");
-          // setStatus("👆🏽 Write a message in the text-field above.");
         } else {
           setWallet("");
           setStatus("🦊 Connect to Metamask using the top right button.");
@@ -145,6 +144,17 @@ const Minter = (props) => {
         )}
 
         <p className="minter_message">{status}</p>
+        <div className="prices">
+          <h2>Mint price</h2>
+          <div className="prices_list">
+            <div>1-4 mint</div>
+            <div>0.69 METIS</div>
+            <div>5-9 mint</div>
+            <div>0.55 METIS</div>
+            <div>10+ mint</div>
+            <div>0.42 METIS</div>
+          </div>
+        </div>
         {success && mintedTokens.length !== 0 && (
           <div className="nft_images">
             <h2>You have minted</h2>

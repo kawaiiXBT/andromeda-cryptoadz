@@ -46,7 +46,7 @@ export const MinterWrapper = styled.div`
       font-size: 56px;
       margin-bottom: 0.5rem;
       @media (max-width: 800px) {
-        font-size: 42px;
+        font-size: 32px;
         margin-bottom: 1rem;
       }
     }
@@ -114,6 +114,21 @@ export const MinterWrapper = styled.div`
     }
     .minter_message {
       font-size: 16px;
+    }
+    .prices_list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      row-gap: 0.5rem;
+      column-gap: 1rem;
+      div {
+        :nth-of-type(odd) {
+          color: white;
+        }
+        :nth-of-type(even) {
+          color: ${(props) => props.theme.titleText};
+          font-weight: 500;
+        }
+      }
     }
     .nft_images {
       width: 80%;
