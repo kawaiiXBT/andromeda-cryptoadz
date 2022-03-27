@@ -58,7 +58,7 @@ contract Toadz is ERC721Enumerable, Ownable, ReentrancyGuard, AccessControl {
     constructor(
     ) ERC721("AndromedaToadz", "ATOADZ") {
         MAX_TOTAL_MINT = 6969;
-        baseTokenURI = "https://ipfs.io/ipfs/Qmdy8iFuiFALUQTPiBvLUkNCuR7Fzv9FbWAm1Dn8Eve4AN/"; // TEST ONLY
+        baseTokenURI = "https://ipfs.io/ipfs/Qmdy8iFuiFALUQTPiBvLUkNCuR7Fzv9FbWAm1Dn8Eve4AN/"; 
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     }
 
